@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      NS_MARIADB_USER: root
+      NS_MARIADB_PASSWORD: password
+      NS_MARIADB_HOSTNAME: mariadb
+      NS_MARIADB_PORT: 3306
+      NS_MARIADB_DATABASE: main
+      # GOO_APP_ID: ${GOO_APP_ID}
+      # OPENAI_API_KEY: ${OPENAI_API_KEY}
+  mariadb:
+    image: mariadb:10.11.5
+    environment:
+      MARIADB_ROOT_PASSWORD: password
+      MARIADB_DATABASE: main
+    expose:
+      - 3306
+    ports:
+      - 3306:3306
+    volumes:
+      - "./schema.sql:/docker-entrypoint-initdb.d/init.sql"
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD
+      interval: 1s
+      timeout: 10s
+      retries: 60
+  adminer:
+    image: adminer:latest
+    ports:
+      - 8081:8080
+    environment:
+      ADMINER_DEFAULT_SERVER: mariadb

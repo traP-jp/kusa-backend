@@ -1,0 +1,94 @@
+openapi: 3.0.3
+info:
+  title: Kusa-backend
+  description: Kusa-backendのAPI仕様書です。
+  version: 1.0.0
+servers:
+  - url: https://kusa.trap.show/api
+paths:
+  /ping:
+    get:
+      summary: 挙動を確認
+      description: 挙動を確認するためのものです。
+      operationId: ping
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ping"
+  /tasks:
+    get:
+      summary: 例文を取得
+      description: 例文を取得
+      operationId: getTasks
+      parameters:
+        - name: level
+          in: query
+          description: 難易度
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: count
+          in: query
+          description: 件数
+          required: true
+          schema:
+            type: integer
+            example: 5
+        - name: isSensitive
+          in: query
+          description: 過激な内容を含むか
+          required: true
+          schema:
+            type: boolean
+            example: false
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/task"
+        "400":
+          description: 正しくないリクエスト
+components:
+  schemas:
+    ping:
+      type: object
+      properties:
+        message:
+          type: string
+          example: pong
+    task:
+      type: array
+      items:
+        type: object
+        properties:
+          content:
+            type: string
+            example: 東京科学大学
+          yomi:
+            type: string
+            example: とうきょうかがくだいがく
+          iconUri: 
+            type: string
+            example: https://q.trap.jp/api/v3/public/icon/ramdos
+          authorDisplayName:
+            type: string
+            example: あんこ🌱
+          grade:
+            type: string
+            example: "21B"
+          authorName:
+            type: string
+            example: anko
+          updatedAt:
+            type: string
+            format: date-time
+            example: "2022-01-01T00:00:00Z"
+          kusaCount:
+            type: integer
+            example: 100
