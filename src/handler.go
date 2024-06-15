@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -15,28 +16,38 @@ type TasksRequest struct {
 }
 
 type Task struct {
-	Content           string `json:"content"`
-	Yomi              string `json:"yomi"`
-	IconUri           string `json:"iconUri"`
-	AutherDisplayName string `json:"authorDisplayName"`
-	Grade             string `json:"grade"`
-	AutherName        string `json:"authorName"`
-	UpdatedAt         string `json:"updatedAt"`
-	KusaCount         int    `json:"kusaCount"`
+	Content           string  `json:"content"`
+	Yomi              string  `json:"yomi"`
+	IconUri           string  `json:"iconUri"`
+	AutherDisplayName string  `json:"authorDisplayName"`
+	Grade             string  `json:"grade"`
+	AutherName        string  `json:"authorName"`
+	UpdatedAt         string  `json:"updatedAt"`
+	Citated           string  `json:"citated"`
+	Image             string  `json:"image"`
+	Stamps            []Stamp `json:"stamps"`
 }
 
+type Stamp struct {
+	StampId string `json:"stampId"`
+	Count   int    `json:"count"`
+}
 type TaskDb struct {
-	Id                int    `db:"id"`
-	Content           string `db:"content"`
-	Yomi              string `db:"yomi"`
-	IconUri           string `db:"iconUri"`
-	AutherDisplayName string `db:"authorDisplayName"`
-	Grade             string `db:"grade"`
-	AutherName        string `db:"authorName"`
-	UpdatedAt         string `db:"updatedAt"`
-	KusaCount         int    `db:"kusaCount"`
-	Level             int    `db:"level"`
-	IsSensitive       bool   `db:"isSensitive"`
+	Id                int       `db:"id"`
+	Content           string    `db:"content"`
+	Yomi              string    `db:"yomi"`
+	IconUri           string    `db:"iconUri"`
+	AutherDisplayName string    `db:"authorDisplayName"`
+	Grade             string    `db:"grade"`
+	AutherName        string    `db:"authorName"`
+	UpdatedAt         time.Time `db:"updatedAt"`
+	Citated           string    `db:"citated"`
+	Image             string    `db:"image"`
+}
+type StampDb struct {
+	TaskId  int    `db:"taskId"`
+	StampId string `db:"stampId"`
+	Count   int    `db:"count"`
 }
 
 func pingHandler(c echo.Context) error {
@@ -67,17 +78,12 @@ func tasksHandler(c echo.Context) error {
 }
 
 func getTaskFromDb(level int, count int, isSensitive bool) ([]Task, error) {
-	var dbContentsCount int
-	err := db.Get(&dbContentsCount, "SELECT COUNT(*) FROM tasks WHERE level = ? AND isSensitive = ?", level, isSensitive)
-	if err != nil {
-		return []Task{}, err
-	}
 
 	returnTasks := []Task{}
 
 	// countがDBのレコード数より多い場合は、すべてのレコードを返す
 	tasksFromDb := []TaskDb{}
-	err = db.Select(&tasksFromDb, "SELECT * FROM tasks WHERE level = ? AND isSensitive = ? ORDER BY RAND() LIMIT ?", level, isSensitive, count)
+	err := db.Select(&tasksFromDb, "SELECT id,content,yomi,iconUri,authorDisplayName, grade,authorName,updatedAt, citated,image FROM tasks WHERE level = ? AND isSensitive = ? ORDER BY RAND() LIMIT ?", level, isSensitive, count)
 	if err != nil {
 		return []Task{}, err
 	}
@@ -89,8 +95,10 @@ func getTaskFromDb(level int, count int, isSensitive bool) ([]Task, error) {
 			AutherDisplayName: task.AutherDisplayName,
 			Grade:             task.Grade,
 			AutherName:        task.AutherName,
-			UpdatedAt:         task.UpdatedAt,
-			KusaCount:         task.KusaCount,
+			UpdatedAt:         task.UpdatedAt.Format("2006/01/02 15:04"),
+			Stamps:            []Stamp{},
+			Citated:           task.Citated,
+			Image:             task.Image,
 		})
 	}
 

@@ -88,7 +88,7 @@ components:
           updatedAt:
             type: string
             format: date-time
-            example: "2022-01-01 00:00:00"
+            example: "2006/01/02 15:04"
           citated:
             type: string
             example: "https://q.trap.jp/messages/25e071cd-45fa-4593-99f4-399e29a2c827"

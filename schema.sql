@@ -7,7 +7,8 @@ CREATE TABLE `tasks` (
     `grade` TEXT NOT NULL,
     `authorName` TEXT NOT NULL,
     `updatedAt` DATETIME NOT NULL,
-    `kusaCount` INT(11) NOT NULL,
     `level` INT(11) NOT NULL,
-    `isSensitive` BOOLEAN NOT NULL
+    `isSensitive` BOOLEAN NOT NULL,
+    `citated` TEXT NOT NULL,
+    `image` TEXT NOT NULL
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
