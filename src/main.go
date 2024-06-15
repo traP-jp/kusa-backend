@@ -43,6 +43,7 @@ func main() {
 
 	e := echo.New()
 	e.GET("/ping", pingHandler)
+	e.GET("/tasks", tasksHandler)
 
 	e.Start(":8080")
 }

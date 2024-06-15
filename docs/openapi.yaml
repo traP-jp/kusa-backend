@@ -88,7 +88,7 @@ components:
           updatedAt:
             type: string
             format: date-time
-            example: "2022-01-01T00:00:00Z"
+            example: "2022-01-01 00:00:00"
           kusaCount:
             type: integer
             example: 100
