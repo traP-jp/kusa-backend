@@ -139,6 +139,15 @@ func getRankingsHandler(c echo.Context) error {
 }
 
 func postRankingsHandler(c echo.Context) error {
-	
+	rankingRequest := RankingsRequest{}
+	err := c.Bind(&rankingRequest)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	_, err = db.Exec("INSERT INTO ranking (userName, score, level, timeStamp) VALUES (?, ?, ?, ?)", rankingRequest.UserName, rankingRequest.Score, rankingRequest.Level, rankingRequest.TimeStamp)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
 	return c.NoContent(http.StatusOK)
 }

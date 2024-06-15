@@ -71,3 +71,10 @@ type RankingDb struct {
 	Level     int       `db:"level"`
 	TimeStamp time.Time `db:"timeStamp"`
 }
+
+type RankingsRequest struct {
+	UserName  string    `json:"userName"`
+	Score     float64   `json:"score"`
+	Level     int       `json:"level"`
+	TimeStamp time.Time `json:"timeStamp"`
+}

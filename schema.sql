@@ -18,7 +18,7 @@ CREATE TABLE `stamps` (
     `stampId` TEXT NOT NULL,
     `count` int(11) NOT NULL
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `ranking` {
+CREATE TABLE `rankings` {
     `id` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `userName` TEXT NOT NULL,
     `score` DOUBLE NOT NULL,
