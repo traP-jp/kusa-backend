@@ -42,7 +42,7 @@ type TaskDb struct {
 	MessageId         string    `db:"messageId"`
 }
 type StampDb struct {
-	TaskId  int    `db:"taskId"`
+	TaskId  string `db:"taskId"`
 	StampId string `db:"stampId"`
 	Count   int    `db:"count"`
 }
