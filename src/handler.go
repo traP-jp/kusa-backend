@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -118,7 +119,7 @@ func getRankingsHandler(c echo.Context) error {
 	}
 
 	rankingsFromDb := []RankingDb{}
-	err = db.Select(&rankingsFromDb, "SELECT rank FROM rankings ORDER BY rank LIMIT ? ", count)
+	err = db.Select(&rankingsFromDb, "SELECT * FROM rankings ORDER BY score DESC LIMIT ? ", count)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
@@ -130,7 +131,7 @@ func getRankingsHandler(c echo.Context) error {
 			UserName: ranking.UserName,
 			Score: ranking.Score,
 			Level: ranking.Level,
-			TimeStamp: ranking.TimeStamp,
+			TimeStamp: ranking.TimeStamp.Format("2006/01/02 15:04"),
 		}
 		rankings = append(rankings, ranking)
 	}
@@ -139,13 +140,19 @@ func getRankingsHandler(c echo.Context) error {
 }
 
 func postRankingsHandler(c echo.Context) error {
+	fmt.Println("postRankingsHandler")
 	rankingRequest := RankingsRequest{}
 	err := c.Bind(&rankingRequest)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	_, err = db.Exec("INSERT INTO ranking (userName, score, level, timeStamp) VALUES (?, ?, ?, ?)", rankingRequest.UserName, rankingRequest.Score, rankingRequest.Level, rankingRequest.TimeStamp)
+	timeStamp, err := time.Parse("2006/01/02 15:04Z07:00", rankingRequest.TimeStamp + "+09:00")
+	if err != nil {
+		fmt.Println("error in parsing timeStamp", err)
+		return c.JSON(http.StatusBadRequest, err)
+	}
+	_, err = db.Exec("INSERT INTO rankings (userName, score, level, timeStamp) VALUES (?, ?, ?, ?)", rankingRequest.UserName, rankingRequest.Score, rankingRequest.Level, timeStamp)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}

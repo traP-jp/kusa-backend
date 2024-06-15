@@ -57,11 +57,11 @@ type AuthHeader struct {
 }
 
 type Ranking struct {
-	Rank      int       `json:"rank" db:"rank"`
-	UserName  string    `json:"userName" db:"userName"`
-	Score     float64   `json:"score" db:"score"`
-	Level     int       `json:"level" db:"level"`
-	TimeStamp time.Time `json:"timeStamp" db:"timeStamp"`
+	Rank      int     `json:"rank" db:"rank"`
+	UserName  string  `json:"userName" db:"userName"`
+	Score     float64 `json:"score" db:"score"`
+	Level     int     `json:"level" db:"level"`
+	TimeStamp string  `json:"timeStamp" db:"timeStamp"`
 }
 
 type RankingDb struct {
@@ -73,8 +73,8 @@ type RankingDb struct {
 }
 
 type RankingsRequest struct {
-	UserName  string    `json:"userName"`
-	Score     float64   `json:"score"`
-	Level     int       `json:"level"`
-	TimeStamp time.Time `json:"timeStamp"`
+	UserName  string  `json:"userName"`
+	Score     float64 `json:"score"`
+	Level     int     `json:"level"`
+	TimeStamp string  `json:"timeStamp"`
 }

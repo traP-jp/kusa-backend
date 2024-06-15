@@ -24,4 +24,4 @@ CREATE TABLE `rankings` {
     `score` DOUBLE NOT NULL,
     `level` INT(11) NOT NULL,
     `timeStamp` DATETIME NOT NULL
-}
+} ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
