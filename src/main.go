@@ -53,6 +53,7 @@ func main() {
 	e.GET("/ping", pingHandler)
 	e.GET("/tasks", tasksHandler)
 	e.GET("/stamp/:id", getStampHandler)
+	e.GET("/me", getMeHandler)
 
 	e.Start(":8080")
 }
