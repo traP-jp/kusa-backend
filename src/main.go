@@ -9,10 +9,12 @@ import (
 	"github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
+	traqwsbot "github.com/traPtitech/traq-ws-bot"
 )
 
 var (
-	db *sqlx.DB
+	db  *sqlx.DB
+	bot *traqwsbot.Bot
 )
 
 func main() {
@@ -41,9 +43,16 @@ func main() {
 	fmt.Println("conntected")
 	db = _db
 
+	bot, err = traqwsbot.NewBot(&traqwsbot.Options{
+		AccessToken: os.Getenv("TRAQ_BOT_TOKEN"),
+	})
+	if err != nil {
+		panic(err)
+	}
 	e := echo.New()
 	e.GET("/ping", pingHandler)
 	e.GET("/tasks", tasksHandler)
+	e.GET("/stamp/:id", getStampHandler)
 
 	e.Start(":8080")
 }

@@ -16,6 +16,7 @@ services:
       NS_MARIADB_HOSTNAME: mariadb
       NS_MARIADB_PORT: 3306
       NS_MARIADB_DATABASE: main
+      TRAQ_BOT_TOKEN: ${TRAQ_BOT_TOKEN}
       # GOO_APP_ID: ${GOO_APP_ID}
       # OPENAI_API_KEY: ${OPENAI_API_KEY}
   mariadb:
