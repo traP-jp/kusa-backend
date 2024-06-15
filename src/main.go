@@ -43,12 +43,12 @@ func main() {
 	fmt.Println("conntected")
 	db = _db
 
-	// bot, err = traqwsbot.NewBot(&traqwsbot.Options{
-	// 	AccessToken: os.Getenv("TRAQ_BOT_TOKEN"),
-	// })
-	// if err != nil {
-	// 	panic(err)
-	// }
+	bot, err = traqwsbot.NewBot(&traqwsbot.Options{
+		AccessToken: os.Getenv("TRAQ_BOT_TOKEN"),
+	})
+	if err != nil {
+		panic(err)
+	}
 	e := echo.New()
 	e.GET("/ping", pingHandler)
 	e.GET("/tasks", tasksHandler)
