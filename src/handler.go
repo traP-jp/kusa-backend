@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"io"
 	"net/http"
 	"strconv"
 	"time"
@@ -123,4 +125,21 @@ func getTaskFromDb(level int, count int, isSensitive bool) ([]Task, error) {
 	}
 
 	return returnTasks, nil
+}
+func getStampHandler(c echo.Context) error {
+	stampId := c.Param("id")
+	fmt.Println(stampId)
+	_, r, _ := bot.API().StampApi.GetStampImage(context.Background(), stampId).Execute()
+
+	// レスポンスヘッダ
+	response := c.Response()
+	response.Header().Set("Cache-Control", "no-store")
+	response.Header().Set(echo.HeaderContentType, echo.MIMEOctetStream)
+	response.Header().Set(echo.HeaderAccessControlExposeHeaders, "Content-Disposition")
+	response.Header().Set(echo.HeaderContentDisposition, "attachment; filename="+stampId)
+	// ステータスコード
+	response.WriteHeader(200)
+	// レスポンスのライターに対して、バイナリデータをコピーする
+	io.Copy(response.Writer, r.Body)
+	return c.NoContent(http.StatusOK)
 }
