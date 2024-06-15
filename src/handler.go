@@ -28,6 +28,7 @@ type Task struct {
 	Citated           string  `json:"citated"`
 	Image             string  `json:"image"`
 	Stamps            []Stamp `json:"stamps"`
+	MessageId         string  `json:"messageId"`
 }
 
 type Stamp struct {
@@ -45,6 +46,7 @@ type TaskDb struct {
 	UpdatedAt         time.Time `db:"updatedAt"`
 	Citated           string    `db:"citated"`
 	Image             string    `db:"image"`
+	MessageId         string    `db:"messageId"`
 }
 type StampDb struct {
 	TaskId  int    `db:"taskId"`
@@ -85,7 +87,7 @@ func getTaskFromDb(level int, count int, isSensitive bool) ([]Task, error) {
 
 	// countがDBのレコード数より多い場合は、すべてのレコードを返す
 	tasksFromDb := []TaskDb{}
-	err := db.Select(&tasksFromDb, "SELECT id,content,yomi,iconUri,authorDisplayName, grade,authorName,updatedAt, citated,image FROM tasks WHERE level = ? AND isSensitive = ? ORDER BY RAND() LIMIT ?", level, isSensitive, count)
+	err := db.Select(&tasksFromDb, "SELECT id,content,yomi,iconUri,authorDisplayName, grade,authorName,updatedAt, citated,image, messageId FROM tasks WHERE level = ? AND isSensitive = ? ORDER BY RAND() LIMIT ?", level, isSensitive, count)
 	if err != nil {
 		return []Task{}, err
 	}
@@ -101,6 +103,7 @@ func getTaskFromDb(level int, count int, isSensitive bool) ([]Task, error) {
 			Stamps:            []Stamp{},
 			Citated:           task.Citated,
 			Image:             task.Image,
+			MessageId:         task.MessageId,
 		})
 	}
 
