@@ -54,6 +54,42 @@ paths:
                 $ref: "#/components/schemas/task"
         "400":
           description: 正しくないリクエスト
+  /me:
+    get:
+      summary: 自身の情報を取得
+      operationId: getMe
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+        "400":
+          description: 正しくないリクエスト
+  /stamps/{fileId}:
+    parameters:
+      - name: fileId
+        in: path
+        schema:
+          type: string
+          format: uuid
+          example: "6308a443-69f0-45e5-866f-56cc2c93578f"
+        required: true
+    get:
+      summary: ファイルをダウンロード
+      responses:
+        '200':
+          description: ok
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
 components:
   schemas:
     ping:
@@ -111,3 +147,12 @@ components:
             type: integer
             description: スタンプ数
             format: integer
+    user:
+      type: object
+      properties:
+        name:
+          type: string
+          example: anko
+        iconUri:
+          type: string
+          example: https://q.trap.jp/api/v3/public/icon/ramdos
