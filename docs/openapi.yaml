@@ -110,8 +110,6 @@ paths:
             application/json:
               schema: 
                 $ref: "#/components/schemas/ranking"
-        "204":
-          description: ランキングにデータが1つもない
         "400":
           description: 正しくないリクエスト
     post: 
@@ -125,7 +123,7 @@ paths:
             schema:
               $ref: "#/components/schemas/gameResult"
       responses:
-        "200":
+        "204":
           description: 成功
         "400":
           description: 正しくないリクエスト

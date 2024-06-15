@@ -136,10 +136,6 @@ func getRankingsHandler(c echo.Context) error {
 		rankings = append(rankings, ranking)
 	}
 
-	if len(rankings) == 0 {
-		return c.JSON(http.StatusNoContent, rankings)
-	}
-
 	return c.JSON(http.StatusOK, rankings)
 }
 
