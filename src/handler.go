@@ -109,3 +109,36 @@ func getMeHandler(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, user)
 }
+
+func getRankingsHandler(c echo.Context) error {
+	countStr := c.QueryParam("count")
+	count, err := strconv.Atoi(countStr)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	rankingsFromDb := []RankingDb{}
+	err = db.Select(&rankingsFromDb, "SELECT rank FROM rankings ORDER BY rank LIMIT ? ", count)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	rankings := []Ranking{}
+	for i, ranking := range rankingsFromDb {
+		ranking := Ranking{
+			Rank: i + 1,
+			UserName: ranking.UserName,
+			Score: ranking.Score,
+			Level: ranking.Level,
+			TimeStamp: ranking.TimeStamp,
+		}
+		rankings = append(rankings, ranking)
+	}
+
+	return c.JSON(http.StatusOK, rankings)
+}
+
+func postRankingsHandler(c echo.Context) error {
+	
+	return c.NoContent(http.StatusOK)
+}

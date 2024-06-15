@@ -55,3 +55,19 @@ type User struct {
 type AuthHeader struct {
 	UserId string `header:"X-Showcase-User"`
 }
+
+type Ranking struct {
+	Rank      int       `json:"rank" db:"rank"`
+	UserName  string    `json:"userName" db:"userName"`
+	Score     float64   `json:"score" db:"score"`
+	Level     int       `json:"level" db:"level"`
+	TimeStamp time.Time `json:"timeStamp" db:"timeStamp"`
+}
+
+type RankingDb struct {
+	Id        int       `db:"id"`
+	UserName  string    `db:"userName"`
+	Score     float64   `db:"score"`
+	Level     int       `db:"level"`
+	TimeStamp time.Time `db:"timeStamp"`
+}

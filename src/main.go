@@ -54,6 +54,8 @@ func main() {
 	e.GET("/tasks", tasksHandler)
 	e.GET("/stamp/:id", getStampHandler)
 	e.GET("/me", getMeHandler)
+	e.GET("/rankings", getRankingsHandler)
+	e.POST("/rankings", postRankingsHandler)
 
 	e.Start(":8080")
 }
