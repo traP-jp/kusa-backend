@@ -1,4 +1,4 @@
-CREATE TABLE `TASKS` (
+CREATE TABLE `tasks` (
     `id` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `content` TEXT NOT NULL,
     `yomi` TEXT NOT NULL,

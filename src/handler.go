@@ -60,7 +60,7 @@ func tasksHandler(c echo.Context) error {
 
 func getTaskFromDb(level int, count int, isSensitive bool) ([]Task, error) {
 	var dbContentsCount int
-	err := db.Get(&dbContentsCount, "SELECT COUNT(*) FROM TASKS WHERE level = ? AND isSensitive = ?", level, isSensitive)
+	err := db.Get(&dbContentsCount, "SELECT COUNT(*) FROM tasks WHERE level = ? AND isSensitive = ?", level, isSensitive)
 	if err != nil {
 		return []Task{}, err
 	}
@@ -69,7 +69,7 @@ func getTaskFromDb(level int, count int, isSensitive bool) ([]Task, error) {
 
 	// countがDBのレコード数より多い場合は、すべてのレコードを返す
 	tasksFromDb := []TaskDb{}
-	err = db.Select(&tasksFromDb, "SELECT * FROM TASKS WHERE level = ? AND isSensitive = ? ORDER BY RAND() LIMIT ?", level, isSensitive, count)
+	err = db.Select(&tasksFromDb, "SELECT * FROM tasks WHERE level = ? AND isSensitive = ? ORDER BY RAND() LIMIT ?", level, isSensitive, count)
 	if err != nil {
 		return []Task{}, err
 	}
