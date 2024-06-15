@@ -26,13 +26,19 @@ type Task struct {
 	Citated           string  `json:"citated"`
 	Image             string  `json:"image"`
 	Stamps            []Stamp `json:"stamps"`
-	MessageId         string  `json:"messageId"`
+}
+
+type StampDb struct {
+	TaskId  string `json:"taskId" db:"taskId"`
+	StampId string `json:"stampId" db:"stampId"`
+	Count   int    `json:"count" db:"count"`
 }
 
 type Stamp struct {
-	StampId string `json:"stampId"`
-	Count   int    `json:"count"`
+	StampId string `json:"stampId" db:"stampId"`
+	Count   int    `json:"count" db:"count"`
 }
+
 type TaskDb struct {
 	Id                int       `db:"id"`
 	Content           string    `db:"content"`
@@ -45,11 +51,6 @@ type TaskDb struct {
 	Citated           string    `db:"citated"`
 	Image             string    `db:"image"`
 	MessageId         string    `db:"messageId"`
-}
-type StampDb struct {
-	TaskId  int    `db:"taskId"`
-	StampId string `db:"stampId"`
-	Count   int    `db:"count"`
 }
 
 func pingHandler(c echo.Context) error {
@@ -87,9 +88,26 @@ func getTaskFromDb(level int, count int, isSensitive bool) ([]Task, error) {
 	tasksFromDb := []TaskDb{}
 	err := db.Select(&tasksFromDb, "SELECT id,content,yomi,iconUri,authorDisplayName, grade,authorName,updatedAt, citated,image, messageId FROM tasks WHERE level = ? AND isSensitive = ? ORDER BY RAND() LIMIT ?", level, isSensitive, count)
 	if err != nil {
+		fmt.Println("error in getting tasks", err)
 		return []Task{}, err
 	}
+
 	for _, task := range tasksFromDb {
+		stampsFromDb := []StampDb{}
+		err := db.Select(&stampsFromDb, "SELECT * FROM stamps WHERE taskId = ?", task.MessageId)
+		if err != nil {
+			fmt.Println("error in getting stamps", err)
+			return []Task{}, err
+		}
+
+		stamps := []Stamp{}
+		for _, stamp := range stampsFromDb {
+			stamps = append(stamps, Stamp{
+				StampId: stamp.StampId,
+				Count:   stamp.Count,
+			})
+		}
+
 		returnTasks = append(returnTasks, Task{
 			Content:           task.Content,
 			Yomi:              task.Yomi,
@@ -98,10 +116,9 @@ func getTaskFromDb(level int, count int, isSensitive bool) ([]Task, error) {
 			Grade:             task.Grade,
 			AutherName:        task.AutherName,
 			UpdatedAt:         task.UpdatedAt.Format("2006/01/02 15:04"),
-			Stamps:            []Stamp{},
+			Stamps:            stamps,
 			Citated:           task.Citated,
 			Image:             task.Image,
-			MessageId:         task.MessageId,
 		})
 	}
 
