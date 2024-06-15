@@ -11,7 +11,7 @@ CREATE TABLE `tasks` (
     `isSensitive` BOOLEAN NOT NULL,
     `citated` TEXT NOT NULL,
     `image` TEXT NOT NULL,
-    `messageId` TEXT NOT NULL,
+    `messageId` TEXT NOT NULL
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `stamps` (
     `taskId` TEXT NOT NULL,
