@@ -90,6 +90,44 @@ paths:
           description: Forbidden
         '404':
           description: Not Found
+  /rankings:
+    get:
+      summary: ランキングを取得
+      description: ランキングを取得
+      operationId: getRanking
+      parameters:
+        - name: count
+          in: query
+          description: 取得する個数（上位）
+          required: true
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/ranking"
+        "400":
+          description: 正しくないリクエスト
+    post: 
+      summary: ランキングに登録
+      description: ランキングに登録
+      operationId: postRanking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/gameResult"
+      responses:
+        "200":
+          description: 成功
+        "400":
+          description: 正しくないリクエスト
+      
 components:
   schemas:
     ping:
@@ -156,3 +194,40 @@ components:
         iconUri:
           type: string
           example: https://q.trap.jp/api/v3/public/icon/ramdos
+    ranking: 
+      type: array
+      items: 
+        type: object
+        properties:
+          rank: 
+            type: integer
+            example: 1
+          userName:
+            type: string
+            example: "kavos"
+          score: 
+            type: number
+            example: 10.5
+          level:
+            type: integer
+            example: 1
+          timeStamp:
+            type: string
+            format: date-time
+            example: "2006/01/02 15:04"
+    gameResult:
+      type: object
+      properties:
+        userName:
+          type: string
+          example: "kavos"
+        score:
+          type: number
+          example: 10.5
+        level:
+          type: integer
+          example: 1
+        timeStamp:
+          type: string
+          format: date-time
+          example: "2006/01/02 15:04"
