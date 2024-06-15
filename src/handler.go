@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -43,13 +44,20 @@ func pingHandler(c echo.Context) error {
 }
 
 func tasksHandler(c echo.Context) error {
-	tasksRequest := &TasksRequest{}
-	err := c.Bind(tasksRequest)
+	level, err := strconv.Atoi(c.QueryParam("level"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+	count, err := strconv.Atoi(c.QueryParam("count"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+	isSensitive, err := strconv.ParseBool(c.QueryParam("isSensitive"))
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	tasks, err := getTaskFromDb(tasksRequest.Level, tasksRequest.Count, tasksRequest.IsSensitive)
+	tasks, err := getTaskFromDb(level, count, isSensitive)
 	if err != nil {
 		fmt.Println("error in getTaskFromDb", err)
 		return c.JSON(http.StatusInternalServerError, err)
