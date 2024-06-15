@@ -12,3 +12,8 @@ CREATE TABLE `tasks` (
     `citated` TEXT NOT NULL,
     `image` TEXT NOT NULL
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `stamps` (
+    `taskId` int(11) NOT NULL,
+    `stampId` int(11) NOT NULL,
+    `count` int(11) NOT NULL
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
