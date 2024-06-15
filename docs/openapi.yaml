@@ -110,6 +110,8 @@ paths:
             application/json:
               schema: 
                 $ref: "#/components/schemas/ranking"
+        "204":
+          description: ランキングにデータが1つもない
         "400":
           description: 正しくないリクエスト
     post: 
