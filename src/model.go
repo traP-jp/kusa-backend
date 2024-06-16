@@ -60,7 +60,8 @@ type Ranking struct {
 	UserName  string  `json:"userName" db:"userName"`
 	Score     float64 `json:"score" db:"score"`
 	Level     int     `json:"level" db:"level"`
-	TimeStamp string  `json:"timeStamp" db:"timeStamp"`
+	TimeStamp string  `json:"timeStamp" db:"timeStamp"`	
+	IconUri   string  `json:"iconUri"`
 }
 
 type RankingDb struct {

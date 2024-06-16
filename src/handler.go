@@ -136,7 +136,8 @@ func getRankingsHandler(c echo.Context) error {
 			UserName:  ranking.UserName,
 			Score:     ranking.Score,
 			Level:     ranking.Level,
-			TimeStamp: ranking.TimeStamp.Format("2006/01/02 15:04"),
+			TimeStamp: ranking.TimeStamp.Format("2006/01/02 15:04"),				
+			IconUri: "https://q.trap.jp/api/v3/public/icon/" + ranking.UserName,
 		}
 		rankings = append(rankings, ranking)
 	}
