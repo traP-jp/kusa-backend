@@ -79,16 +79,16 @@ paths:
     get:
       summary: ファイルをダウンロード
       responses:
-        '200':
+        "200":
           description: ok
           content:
             application/octet-stream:
               schema:
                 type: string
                 format: binary
-        '403':
+        "403":
           description: Forbidden
-        '404':
+        "404":
           description: Not Found
   /rankings:
     get:
@@ -103,16 +103,23 @@ paths:
           schema:
             type: integer
             example: 10
+        - name: level
+          in: query
+          description: 難易度
+          required: true
+          schema:
+            type: integer
+            example: 1
       responses:
         "200":
           description: 成功
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: "#/components/schemas/ranking"
         "400":
           description: 正しくないリクエスト
-    post: 
+    post:
       summary: ランキングに登録
       description: ランキングに登録
       operationId: postRanking
@@ -127,7 +134,7 @@ paths:
           description: 成功
         "400":
           description: 正しくないリクエスト
-      
+
 components:
   schemas:
     ping:
@@ -147,7 +154,7 @@ components:
           yomi:
             type: string
             example: とうきょうかがくだいがく
-          iconUri: 
+          iconUri:
             type: string
             example: https://q.trap.jp/api/v3/public/icon/ramdos
           authorDisplayName:
@@ -170,7 +177,7 @@ components:
             type: string
             example: "https://q.trap.jp/files/b8050d58-17d9-4c84-a910-b670cb3b77bc"
           stamps:
-            $ref: '#/components/schemas/stamp'
+            $ref: "#/components/schemas/stamp"
     stamp:
       title: MessageStamp
       type: array
@@ -194,18 +201,18 @@ components:
         iconUri:
           type: string
           example: https://q.trap.jp/api/v3/public/icon/ramdos
-    ranking: 
+    ranking:
       type: array
-      items: 
+      items:
         type: object
         properties:
-          rank: 
+          rank:
             type: integer
             example: 1
           userName:
             type: string
             example: "kavos"
-          score: 
+          score:
             type: number
             example: 10.5
           level:

@@ -117,9 +117,14 @@ func getRankingsHandler(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
+	levelStr := c.QueryParam("level")
+	level, err := strconv.Atoi(levelStr)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
 
 	rankingsFromDb := []RankingDb{}
-	err = db.Select(&rankingsFromDb, "SELECT * FROM rankings ORDER BY score DESC LIMIT ? ", count)
+	err = db.Select(&rankingsFromDb, "SELECT * FROM rankings WHERE level = ? ORDER BY score DESC LIMIT ?", level, count)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
@@ -127,10 +132,10 @@ func getRankingsHandler(c echo.Context) error {
 	rankings := []Ranking{}
 	for i, ranking := range rankingsFromDb {
 		ranking := Ranking{
-			Rank: i + 1,
-			UserName: ranking.UserName,
-			Score: ranking.Score,
-			Level: ranking.Level,
+			Rank:      i + 1,
+			UserName:  ranking.UserName,
+			Score:     ranking.Score,
+			Level:     ranking.Level,
 			TimeStamp: ranking.TimeStamp.Format("2006/01/02 15:04"),
 		}
 		rankings = append(rankings, ranking)
@@ -147,7 +152,7 @@ func postRankingsHandler(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	timeStamp, err := time.Parse("2006/01/02 15:04Z07:00", rankingRequest.TimeStamp + "+09:00")
+	timeStamp, err := time.Parse("2006/01/02 15:04Z07:00", rankingRequest.TimeStamp+"+09:00")
 	if err != nil {
 		fmt.Println("error in parsing timeStamp", err)
 		return c.JSON(http.StatusBadRequest, err)
