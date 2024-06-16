@@ -21,7 +21,6 @@ type Task struct {
 	Citated           string  `json:"citated"`
 	Image             string  `json:"image"`
 	Stamps            []Stamp `json:"stamps"`
-	MessageId         string  `json:"messageId"`
 }
 
 type Stamp struct {
